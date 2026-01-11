@@ -15,17 +15,17 @@ const CONFIG = {
         { name: 'cyan', hex: '#06b6d4' }
     ],
     levels: [
-        { codeLength: 2, numColors: 4, maxGuesses: 6, descentTime: 60000, spawnRate: 25000 },  // Level 1-3
-        { codeLength: 2, numColors: 4, maxGuesses: 6, descentTime: 55000, spawnRate: 22000 },
-        { codeLength: 3, numColors: 4, maxGuesses: 6, descentTime: 50000, spawnRate: 20000 },
-        { codeLength: 3, numColors: 5, maxGuesses: 5, descentTime: 50000, spawnRate: 18000 },  // Level 4-6
-        { codeLength: 3, numColors: 5, maxGuesses: 5, descentTime: 45000, spawnRate: 16000 },
-        { codeLength: 4, numColors: 5, maxGuesses: 5, descentTime: 45000, spawnRate: 15000 },
-        { codeLength: 4, numColors: 6, maxGuesses: 5, descentTime: 40000, spawnRate: 14000 },  // Level 7-10
-        { codeLength: 4, numColors: 6, maxGuesses: 5, descentTime: 35000, spawnRate: 13000 },
-        { codeLength: 5, numColors: 6, maxGuesses: 5, descentTime: 35000, spawnRate: 12000 },
-        { codeLength: 5, numColors: 6, maxGuesses: 5, descentTime: 30000, spawnRate: 11000 },
-        { codeLength: 5, numColors: 7, maxGuesses: 5, descentTime: 25000, spawnRate: 10000 },  // Level 11+
+        { codeLength: 2, numColors: 4, descentTime: 75000, spawnRate: 40000 },   // Level 1: Easy intro
+        { codeLength: 2, numColors: 4, descentTime: 70000, spawnRate: 35000 },   // Level 2
+        { codeLength: 3, numColors: 4, descentTime: 100000, spawnRate: 50000 },  // Level 3: 3 pegs
+        { codeLength: 3, numColors: 5, descentTime: 95000, spawnRate: 45000 },   // Level 4
+        { codeLength: 3, numColors: 5, descentTime: 90000, spawnRate: 40000 },   // Level 5
+        { codeLength: 4, numColors: 5, descentTime: 120000, spawnRate: 55000 },  // Level 6: 4 pegs
+        { codeLength: 4, numColors: 6, descentTime: 110000, spawnRate: 50000 },  // Level 7
+        { codeLength: 4, numColors: 6, descentTime: 100000, spawnRate: 45000 },  // Level 8
+        { codeLength: 5, numColors: 6, descentTime: 150000, spawnRate: 65000 },  // Level 9: 5 pegs
+        { codeLength: 5, numColors: 6, descentTime: 140000, spawnRate: 60000 },  // Level 10
+        { codeLength: 5, numColors: 7, descentTime: 130000, spawnRate: 55000 },  // Level 11+
     ],
     maxCodes: 3,
     pointsPerPeg: 100,
@@ -111,7 +111,6 @@ function createCode() {
         id: Date.now() + Math.random(),
         secret: generateCode(config.codeLength, config.numColors),
         guesses: [],
-        maxGuesses: config.maxGuesses,
         startTime: Date.now(),
         descentTime: config.descentTime,
         progress: 0
@@ -153,9 +152,6 @@ function submitGuess() {
     // Check if cracked
     if (result.bulls === selectedCode.secret.length) {
         crackCode(selectedCode);
-    } else if (selectedCode.guesses.length >= selectedCode.maxGuesses) {
-        // Out of guesses - code explodes
-        explodeCode(selectedCode);
     } else {
         playSound('guess');
     }
@@ -459,7 +455,7 @@ function createCodeElement(code, index) {
         <div class="code-header">
             <span class="bomb-label">💣 Bomb #${gameState.codes.length - index}</span>
             <span class="selected-label">ACTIVE</span>
-            <span class="guess-count">0/${code.maxGuesses}</span>
+            <span class="guess-count">Guesses: 0</span>
         </div>
         <div class="code-pegs">
             ${code.secret.map(() => '<div class="peg hidden-peg"></div>').join('')}
@@ -479,7 +475,7 @@ function updateCodeElement(el, code, index) {
     el.classList.toggle('danger', code.progress > 0.8);
 
     // Update guess count
-    el.querySelector('.guess-count').textContent = `${code.guesses.length}/${code.maxGuesses}`;
+    el.querySelector('.guess-count').textContent = `Guesses: ${code.guesses.length}`;
 
     // Update descent bar
     el.querySelector('.descent-fill').style.width = `${code.progress * 100}%`;
@@ -603,6 +599,15 @@ function showScreen(screenName) {
     document.querySelectorAll('.screen').forEach(s => s.classList.add('hidden'));
     document.getElementById(`${screenName}-screen`).classList.remove('hidden');
     gameState.screen = screenName;
+}
+
+// Debug function - call from browser console: startAtLevel(3)
+function startAtLevel(level) {
+    gameState.level = level;
+    startGame();
+    gameState.level = level; // Set again after startGame resets it
+    renderGame();
+    console.log(`Started at level ${level}:`, getLevelConfig());
 }
 
 function startGame() {
