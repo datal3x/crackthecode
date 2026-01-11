@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crack the Code</title>
+    <link rel="icon" type="image/svg+xml" href="bomb.svg">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript">
+        (function(c,l,a,r,i,t,y){
+            c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+            t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+            y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        })(window, document, "clarity", "script", "uzikfhbb61");
+    </script>
+</head>
+<body>
+    <div id="game-container">
+        <!-- Main Menu -->
+        <div id="menu-screen" class="screen">
+            <a href="https://datal3x.github.io" target="_blank" class="brand">DATAL3x</a>
+            <div class="title">CRACK THE CODE</div>
+            <div class="subtitle">...if you are brave enough</div>
+            <div class="story">
+                <p>The city is under threat.</p>
+                <p>Multiple bombs have been planted across the grid.</p>
+                <p>Each bomb is locked with a color sequence that only YOU can crack.</p>
+                <p class="story-highlight">Decode the pattern. Beat the clock. Save everyone.</p>
+                <p class="story-warning">Fail... and it all goes BOOM.</p>
+            </div>
+            <button id="play-btn" class="pixel-btn">DISARM NOW</button>
+            <button id="instructions-btn" class="pixel-btn small">HOW TO PLAY</button>
+            <button id="scores-btn" class="pixel-btn small">HIGH SCORES</button>
+            <div id="best-score">BEST: <span id="best-score-value">0</span></div>
+        </div>
+
+        <!-- Instructions Screen -->
+        <div id="instructions-screen" class="screen hidden">
+            <div class="title">HOW TO PLAY</div>
+            <div class="instructions-content">
+                <div class="instruction-section">
+                    <div class="instruction-header">🎯 GOAL</div>
+                    <p>Crack the secret color code before the timer runs out!</p>
+                </div>
+                <div class="instruction-section">
+                    <div class="instruction-header">🎮 GAMEPLAY</div>
+                    <p>1. Select colors to build your guess</p>
+                    <p>2. Tap SUBMIT to check your guess</p>
+                    <p>3. Use the hints to crack the code</p>
+                </div>
+                <div class="instruction-section">
+                    <div class="instruction-header">💡 HINTS</div>
+                    <div class="hint-example">
+                        <span class="hint-green">●</span> = Right color, RIGHT place
+                    </div>
+                    <div class="hint-example">
+                        <span class="hint-yellow">●</span> = Right color, WRONG place
+                    </div>
+                    <div class="hint-example">
+                        <span class="hint-empty">○</span> = Wrong color
+                    </div>
+                </div>
+                <div class="instruction-section">
+                    <div class="instruction-header">⚡ POWER-UPS</div>
+                    <p>? = Reveal one correct position</p>
+                    <p>* = Freeze the timer</p>
+                    <p>X = Instantly disarm bomb</p>
+                </div>
+            </div>
+            <button id="instructions-back-btn" class="pixel-btn">BACK</button>
+        </div>
+
+        <!-- Explosion Screen -->
+        <div id="explosion-screen" class="screen hidden">
+            <div class="explosion-container">
+                <div class="explosion-flash"></div>
+                <div class="explosion-text">BOOM!</div>
+            </div>
+        </div>
+
+        <!-- Game Screen -->
+        <div id="game-screen" class="screen hidden">
+            <!-- Header -->
+            <div id="game-header">
+                <div id="score-display">SCORE: <span id="score">0</span></div>
+                <div id="level-display">LV: <span id="level">1</span></div>
+                <div id="combo-display">COMBO: <span id="combo">x1</span></div>
+            </div>
+
+            <!-- Codes Area -->
+            <div id="codes-area">
+                <div id="next-puzzle-msg" class="hidden">
+                    <span class="cooking-text">🚨 New Bomb Detected</span>
+                    <span id="spawn-timer">5</span>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div id="input-area">
+                <div id="current-guess"></div>
+                <div id="color-palette"></div>
+                <div id="input-controls">
+                    <button id="clear-btn" class="pixel-btn small">CLEAR</button>
+                    <button id="submit-btn" class="pixel-btn small">SUBMIT</button>
+                </div>
+            </div>
+
+            <!-- Power-ups -->
+            <div id="powerups">
+                <button class="powerup-btn" data-power="reveal" title="Reveal one position">
+                    <span class="powerup-icon">?</span>
+                    <span class="powerup-count" id="reveal-count">2</span>
+                </button>
+                <button class="powerup-btn" data-power="freeze" title="Freeze descent">
+                    <span class="powerup-icon">*</span>
+                    <span class="powerup-count" id="freeze-count">1</span>
+                </button>
+                <button class="powerup-btn" data-power="nuke" title="Clear one code">
+                    <span class="powerup-icon">X</span>
+                    <span class="powerup-count" id="nuke-count">0</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Game Over Screen -->
+        <div id="gameover-screen" class="screen hidden">
+            <div class="title">MISSION FAILED</div>
+            <div class="gameover-subtitle">The bomb exploded...</div>
+            <div id="final-score">BOMBS DISARMED: <span id="final-score-value">0</span></div>
+            <div id="final-level">LEVEL REACHED: <span id="final-level-value">1</span></div>
+            <div id="new-high" class="hidden">NEW HIGH SCORE!</div>
+            <button id="restart-btn" class="pixel-btn">TRY AGAIN</button>
+            <button id="menu-btn" class="pixel-btn">MENU</button>
+        </div>
+
+        <!-- High Scores Screen -->
+        <div id="scores-screen" class="screen hidden">
+            <div class="title">HIGH SCORES</div>
+            <div id="scores-list"></div>
+            <button id="back-btn" class="pixel-btn">BACK</button>
+        </div>
+
+        <!-- Scanline overlay -->
+        <div id="scanlines"></div>
+    </div>
+
+    <script src="game.js"></script>
+</body>
+</html>
